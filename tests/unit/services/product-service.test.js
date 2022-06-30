@@ -39,4 +39,12 @@ describe('ProductService', () => {
 
     await expect(ProductService.getProduct(1)).to.be.rejectedWith(Error);
   });
+
+  it('should create a product if createProduct is called', async () => {
+    const product = { name: 'Produto 1' };
+    sinon.stub(ProductModel, 'createProduct').resolves(1);
+    const result = await ProductService.createProduct(product);
+
+    expect(result).to.equal(1);
+  });
 });
