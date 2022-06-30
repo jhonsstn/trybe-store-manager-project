@@ -1,4 +1,5 @@
 const Boom = require('@hapi/boom');
+const ProductValidator = require('../middlewares/product-validator');
 const ProductModel = require('../models/product-model');
 
 const ProductService = {
@@ -14,6 +15,7 @@ const ProductService = {
   },
 
   async createProduct(product) {
+    await ProductValidator.validateProduct(product);
     const newProduct = await ProductModel.createProduct(product);
     return newProduct;
   },
