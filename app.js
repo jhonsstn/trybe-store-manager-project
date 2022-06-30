@@ -11,6 +11,7 @@ app.get('/', (_request, response) => {
 app.use('/products', productRoutes);
 
 app.use((err, _req, res, _next) => {
+  console.log('Verificando erro:', err);
   const {
     output: { payload },
   } = err;
