@@ -22,8 +22,12 @@ describe('ProductService', () => {
       { id: 1, name: 'Produto 1' },
       { id: 2, name: 'Produto 2' },
     ];
-    sinon.stub(ProductModel, 'getProducts').resolves(productList);
-    const result = await ProductModel.getProducts();
+    const getProductsStub = sinon
+      .stub(ProductModel, 'getProducts')
+      .resolves(productList);
+    const result = await ProductService.getProducts();
+
+    expect(getProductsStub.calledWith()).to.be.true;
     expect(result).to.deep.equal(productList);
   });
 });
