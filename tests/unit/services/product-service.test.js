@@ -1,8 +1,11 @@
 const { describe } = require('mocha');
-const { expect } = require('chai');
+const chai = require('chai');
+const { expect } = chai;
 const sinon = require('sinon');
 const ProductModel = require('../../../models/product-model');
 const ProductService = require('../../../services/product-service');
+const { Boom } = require('@hapi/boom');
+chai.use(require('chai-as-promised'));
 
 describe('ProductService', () => {
   afterEach(() => {
@@ -29,5 +32,11 @@ describe('ProductService', () => {
 
     expect(getProductsStub.calledWith()).to.be.true;
     expect(result).to.deep.equal(productList);
+  });
+
+  it("should throw if getProduct don't find a product", async () => {
+    sinon.stub(ProductModel, 'getProduct').resolves(undefined);
+
+    await expect(ProductService.getProduct(1)).to.be.rejectedWith(Error);
   });
 });
