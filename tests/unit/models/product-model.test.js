@@ -14,4 +14,20 @@ describe('ProductModel', () => {
     const result = await ProductModel.getProduct(1);
     expect(result.id).to.equal(1);
   });
+
+  it('should return a product list if getProducts is called', async () => {
+    const products = [
+      [
+        { id: 1, name: 'Produto 1' },
+        { id: 2, name: 'Produto 2' },
+      ],
+    ];
+    const productList = [
+      { id: 1, name: 'Produto 1' },
+      { id: 2, name: 'Produto 2' },
+    ];
+    sinon.stub(db, 'query').resolves(products);
+    const result = await ProductModel.getProducts();
+    expect(result).to.deep.equal(productList);
+  });
 });
