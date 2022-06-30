@@ -6,4 +6,6 @@ const route = Router();
 
 route.get('/', rescue(productController.getProducts));
 
+route.get('/:id', rescue(productController.getProduct));
+
 module.exports = route;
