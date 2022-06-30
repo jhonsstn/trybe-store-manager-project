@@ -4,13 +4,11 @@ const sinon = require('sinon');
 const ProductController = require('../../../controllers/product-controller');
 const ProductService = require('../../../services/product-service');
 
-const mockRequest = (id) => {
-  return {
-    params: {
-      id,
-    },
-  };
-};
+const mockRequest = (id) => ({
+  params: {
+    id,
+  },
+});
 
 const mockResponse = () => {
   const res = {};
@@ -35,5 +33,22 @@ describe('ProductController', () => {
     expect(getProductStub.calledWith(1)).to.be.true;
     expect(res.status.calledWith(200)).to.be.true;
     expect(res.json.calledWith({ id: 1, name: 'Produto 1' })).to.be.true;
+  });
+
+  it('should return a product if calls getProduct with correct id', async () => {
+    const req = mockRequest();
+    const res = mockResponse();
+    const products = [
+      { id: 1, name: 'Produto 1' },
+      { id: 2, name: 'Produto 2' },
+    ];
+    const getProductStub = sinon
+      .stub(ProductService, 'getProducts')
+      .resolves(products);
+    await ProductController.getProducts(req, res);
+
+    expect(getProductStub.calledWith()).to.be.true;
+    expect(res.status.calledWith(200)).to.be.true;
+    expect(res.json.calledWith(products)).to.be.true;
   });
 });
