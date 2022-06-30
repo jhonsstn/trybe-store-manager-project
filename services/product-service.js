@@ -15,7 +15,7 @@ const ProductService = {
   },
 
   async createProduct(product) {
-    await ProductValidator.validateProduct(product);
+    ProductValidator.validateProduct(product);
     const newProduct = await ProductModel.createProduct(product);
     return newProduct;
   },

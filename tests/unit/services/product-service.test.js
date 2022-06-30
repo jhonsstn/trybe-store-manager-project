@@ -4,7 +4,7 @@ const { expect } = chai;
 const sinon = require('sinon');
 const ProductModel = require('../../../models/product-model');
 const ProductService = require('../../../services/product-service');
-const { Boom } = require('@hapi/boom');
+const ProductValidator = require('../../../middlewares/product-validator');
 chai.use(require('chai-as-promised'));
 
 describe('ProductService', () => {
@@ -42,6 +42,7 @@ describe('ProductService', () => {
 
   it('should create a product if createProduct is called', async () => {
     const product = { name: 'Produto 1' };
+    sinon.stub(ProductValidator, 'validateProduct').resolves();
     sinon.stub(ProductModel, 'createProduct').resolves(1);
     const result = await ProductService.createProduct(product);
 
