@@ -6,7 +6,7 @@ const ProductModel = {
     return product[0];
   },
   async getProducts() {
-    const [product] = await db.query('SELECT * FROM products}');
+    const [product] = await db.query('SELECT * FROM products');
     return product;
   },
 };
