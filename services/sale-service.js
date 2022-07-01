@@ -4,18 +4,22 @@ const SaleValidator = require('../middlewares/sale-validator');
 
 const SaleService = {
   createSale: async (sales) => {
+    let newSaleId = 0;
     if (Array.isArray(sales)) {
       sales.forEach((sale) => SaleValidator.validateSale(sale));
       const toResolve = [];
-      for (let index = 0; index < sales.length; index += 1) {
-        toResolve.push(SaleValidator.productExists(sales[index].productId));
-      }
+      sales.forEach((sale) => {
+        toResolve.push(SaleValidator.productExists(sale.productId));
+      });
       await Promise.all(toResolve);
+      newSaleId = await SaleModel.createSale();
+      sales.forEach((sale) => SaleModel.createProductSales(newSaleId, sale));
     } else {
       SaleValidator.validateSale(sales);
       await SaleValidator.productExists(sales.productId);
+      newSaleId = await SaleModel.createSale();
+      await SaleModel.createProductSales(newSaleId, sales);
     }
-    const newSaleId = SaleModel.createSale();
     return newSaleId;
   },
 };
