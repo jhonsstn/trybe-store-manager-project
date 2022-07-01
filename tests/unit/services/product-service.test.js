@@ -35,9 +35,14 @@ describe('ProductService', () => {
   });
 
   it("should throw if getProduct don't find a product", async () => {
-    sinon.stub(ProductModel, 'getProduct').resolves(undefined);
-
-    await expect(ProductService.getProduct(1)).to.be.rejectedWith(Error);
+    sinon.stub(ProductModel, 'getProduct').resolves();
+    try {
+      await ProductService.getProduct(1);
+    } catch (error) {
+      expect(error.isBoom).to.be.true;
+      expect(error.output.statusCode).to.equal(404);
+      expect(error.output.payload.message).to.equal('Product not found');
+    }
   });
 
   it('should create a product if createProduct is called', async () => {
