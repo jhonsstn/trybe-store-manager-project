@@ -1,4 +1,3 @@
-const { describe } = require('mocha');
 const { expect } = require('chai');
 const sinon = require('sinon');
 const db = require('../../../models/connection');
