@@ -14,12 +14,12 @@ const mockResponse = () => {
   return res;
 };
 
-describe('SaleService', () => {
+describe('SaleController', () => {
   afterEach(() => {
     sinon.restore();
   });
 
-  it('should create a sale if calls createSale', async () => {
+  it('should create a sale if calls createSale with an array of products', async () => {
     const sale = [
       {
         productId: 1,
@@ -45,6 +45,32 @@ describe('SaleService', () => {
         {
           productId: 2,
           quantity: 5,
+        },
+      ],
+    };
+
+    expect(createSaleStub.calledWith()).to.be.true;
+    expect(res.status.calledWith(201)).to.be.true;
+    expect(res.json.calledWith(expectedResponse)).to.be.true;
+  });
+
+  it('should create a sale if calls createSale with only one product', async () => {
+    const sale = {
+      productId: 1,
+      quantity: 1,
+    };
+
+    const req = mockRequest(sale);
+    const res = mockResponse();
+    const createSaleStub = sinon.stub(SaleService, 'createSale').resolves(1);
+    await SaleController.createSale(req, res);
+
+    const expectedResponse = {
+      id: 1,
+      itemsSold: [
+        {
+          productId: 1,
+          quantity: 1,
         },
       ],
     };
