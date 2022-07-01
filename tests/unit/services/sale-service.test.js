@@ -64,4 +64,15 @@ describe('SaleService', () => {
     const result = await SaleService.getSale(1);
     expect(result).to.deep.equal(sale);
   });
+
+  it("should throw an error if getSale don't find a sale", async () => {
+    sinon.stub(SaleModel, 'getSale').resolves([]);
+    try {
+      await SaleService.getSale(1);
+    } catch (error) {
+      expect(error.isBoom).to.be.true;
+      expect(error.output.statusCode).to.equal(404);
+      expect(error.output.payload.message).to.equal('Sale not found');
+    }
+  });
 });
