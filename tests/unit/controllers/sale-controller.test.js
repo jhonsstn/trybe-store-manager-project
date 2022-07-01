@@ -3,8 +3,11 @@ const SaleController = require('../../../controllers/sale-controller');
 const sinon = require('sinon');
 const { expect } = require('chai');
 
-const mockRequest = (sale) => ({
+const mockRequest = (sale, id) => ({
   body: sale,
+  params: {
+    id,
+  },
 });
 
 const mockResponse = () => {
@@ -78,5 +81,45 @@ describe('SaleController', () => {
     expect(createSaleStub.calledWith()).to.be.true;
     expect(res.status.calledWith(201)).to.be.true;
     expect(res.json.calledWith(expectedResponse)).to.be.true;
+  });
+
+  it('should get all sales if calls getSales', async () => {
+    const sales = [
+      {
+        id: 1,
+        productId: 1,
+        quantity: 1,
+      },
+      {
+        id: 2,
+        productId: 2,
+        quantity: 5,
+      },
+    ];
+
+    sinon.stub(SaleService, 'getSales').resolves(sales);
+    const req = mockRequest();
+    const res = mockResponse();
+    await SaleController.getSales(req, res);
+
+    expect(res.status.calledWith(200)).to.be.true;
+    expect(res.json.calledWith(sales)).to.be.true;
+  });
+
+  it('should get a sale if calls getSale', async () => {
+    const sale = {
+      id: 1,
+      productId: 1,
+      quantity: 1,
+    };
+
+    const getSaleStub = sinon.stub(SaleService, 'getSale').resolves(sale);
+    const req = mockRequest(null, 1);
+    const res = mockResponse();
+    await SaleController.getSale(req, res);
+
+    expect(getSaleStub.calledWith(1)).to.be.true;
+    expect(res.status.calledWith(200)).to.be.true;
+    expect(res.json.calledWith(sale)).to.be.true;
   });
 });
