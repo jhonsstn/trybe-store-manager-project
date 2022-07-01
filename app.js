@@ -1,5 +1,6 @@
 const express = require('express');
 const productRoutes = require('./routes/product-routes');
+const saleRoutes = require('./routes/sale-routes');
 
 const app = express();
 
@@ -11,6 +12,8 @@ app.get('/', (_request, response) => {
 });
 
 app.use('/products', productRoutes);
+
+app.use('/sales', saleRoutes);
 
 app.use((err, _req, res, _next) => {
   const {
