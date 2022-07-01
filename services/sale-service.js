@@ -1,4 +1,5 @@
 // const Boom = require('@hapi/boom');
+const Boom = require('@hapi/boom');
 const SaleModel = require('../models/sale-model');
 const SaleValidator = require('../middlewares/sale-validator');
 
@@ -30,6 +31,9 @@ const SaleService = {
 
   getSale: async (id) => {
     const sale = await SaleModel.getSale(id);
+    if (sale.length === 0) {
+      throw Boom.notFound('Sale not found');
+    }
     return sale;
   },
 };
