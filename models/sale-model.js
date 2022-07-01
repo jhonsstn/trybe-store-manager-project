@@ -21,8 +21,8 @@ const SaleModel = {
     s.date,
     sp.product_id as productId,
     sp.quantity
-    from sales_products as sp
-    join sales as s
+    from StoreManager.sales_products as sp
+    join StoreManager.sales as s
     on s.id=sp.sale_id;`;
     const [sales] = await db.query(sqlQuery);
     return sales;
@@ -33,8 +33,8 @@ const SaleModel = {
     select s.date,
     sp.product_id as productId,
     sp.quantity
-    from sales_products as sp
-    join sales as s
+    from StoreManager.sales_products as sp
+    join StoreManager.sales as s
     on s.id=sp.sale_id
     where s.id = ?;`;
     const [sale] = await db.query(sqlQuery, [id]);
