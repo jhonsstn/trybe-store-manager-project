@@ -24,6 +24,7 @@ describe('SaleService', () => {
       quantity: 5,
     };
 
+    sinon.stub(SaleModel, 'createProductSales').resolves();
     const createSaleStub = sinon.stub(SaleModel, 'createSale').resolves(1);
     const resultMultiple = await SaleService.createSale(multipleSales);
     expect(resultMultiple).to.equal(1);
@@ -31,5 +32,36 @@ describe('SaleService', () => {
     const uniqueResult = await SaleService.createSale(uniqueSale);
     expect(createSaleStub.calledTwice).to.be.true;
     expect(uniqueResult).to.equal(1);
+  });
+
+  it('should get all sales if calls getSales', async () => {
+    const sales = [
+      {
+        id: 1,
+        productId: 1,
+        quantity: 1,
+      },
+      {
+        id: 2,
+        productId: 2,
+        quantity: 5,
+      },
+    ];
+
+    sinon.stub(SaleModel, 'getSales').resolves(sales);
+    const result = await SaleService.getSales();
+    expect(result).to.deep.equal(sales);
+  });
+
+  it('should get a sale if calls getSale', async () => {
+    const sale = {
+      id: 1,
+      productId: 1,
+      quantity: 1,
+    };
+
+    sinon.stub(SaleModel, 'getSale').resolves(sale);
+    const result = await SaleService.getSale(1);
+    expect(result).to.deep.equal(sale);
   });
 });
