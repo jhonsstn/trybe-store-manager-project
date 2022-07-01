@@ -1,4 +1,5 @@
 const Boom = require('@hapi/boom');
+const ProductModel = require('../models/product-model');
 
 const SaleValidator = {
   validateSale: (sale) => {
@@ -11,6 +12,11 @@ const SaleValidator = {
     if (sale.quantity < 1) {
       throw Boom.badData('"quantity" must be greater than or equal to 1');
     }
+  },
+
+  productExists: async (productId) => {
+    const product = await ProductModel.productExists(productId);
+    if (!product) throw Boom.notFound('Product not found');
   },
 };
 

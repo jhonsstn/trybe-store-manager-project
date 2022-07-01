@@ -18,6 +18,12 @@ const ProductModel = {
     const [{ insertId }] = await db.query(sqlQuery, [product.name]);
     return insertId;
   },
+
+  productExists: async (productId) => {
+    const sqlQuery = 'SELECT 1 FROM StoreManager.products WHERE id = ?';
+    const [[product]] = await db.query(sqlQuery, [productId]);
+    return !!product;
+  },
 };
 
 module.exports = ProductModel;
