@@ -12,4 +12,6 @@ route.post('/', rescue(productController.createProduct));
 
 route.put('/:id', rescue(productController.updateProduct));
 
+route.delete('/:id', rescue(productController.deleteProduct));
+
 module.exports = route;
