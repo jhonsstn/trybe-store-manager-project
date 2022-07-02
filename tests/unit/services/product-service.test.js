@@ -53,4 +53,28 @@ describe('ProductService', () => {
 
     expect(result).to.equal(1);
   });
+
+  it('should update a product if updateProduct is called', async () => {
+    const product = { name: 'New Produto 1' };
+    sinon.stub(ProductValidator, 'validateProduct').resolves();
+    sinon.stub(ProductModel, 'updateProduct').resolves();
+    await ProductService.updateProduct(2, product);
+
+    expect(ProductValidator.validateProduct.calledWith(product)).to.be.true;
+    expect(ProductModel.updateProduct.calledWith(2, product)).to.be.true;
+  });
+
+  it("should throw if updateProduct don't find a product", async () => {
+    const product = { name: 'New Produto 1' };
+    sinon.stub(ProductValidator, 'validateProduct').resolves();
+    sinon.stub(ProductModel, 'getProduct').resolves();
+    sinon.stub(ProductModel, 'updateProduct').resolves();
+    try {
+      await ProductService.updateProduct(2, product);
+    } catch (error) {
+      expect(error.isBoom).to.be.true;
+      expect(error.output.statusCode).to.equal(404);
+      expect(error.output.payload.message).to.equal('Product not found');
+    }
+  });
 });
