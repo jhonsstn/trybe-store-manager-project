@@ -29,6 +29,11 @@ const ProductModel = {
     const sqlQuery = 'UPDATE StoreManager.products SET name = ? WHERE id = ?;';
     await db.query(sqlQuery, [product.name, id]);
   },
+
+  deleteProduct: async (id) => {
+    const sqlQuery = 'DELETE FROM StoreManager.products WHERE id = ?;';
+    await db.query(sqlQuery, [id]);
+  },
 };
 
 module.exports = ProductModel;
