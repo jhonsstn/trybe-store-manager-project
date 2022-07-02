@@ -57,4 +57,11 @@ describe('SaleModel', () => {
 
     expect(result).to.deep.equal(sale);
   });
+
+  it('should delete a sale if calls deleteSale', async () => {
+    const queryStub = sinon.stub(db, 'query').resolves();
+    await SaleModel.deleteSale(1);
+
+    expect(queryStub.calledOnce).to.be.true;
+  });
 });
