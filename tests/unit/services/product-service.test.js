@@ -77,4 +77,23 @@ describe('ProductService', () => {
       expect(error.output.payload.message).to.equal('Product not found');
     }
   });
+
+  it('should delete a product if deleteProduct is called', async () => {
+    sinon.stub(ProductModel, 'deleteProduct').resolves();
+    await ProductService.deleteProduct(2);
+
+    expect(ProductModel.deleteProduct.calledWith(2)).to.be.true;
+  });
+
+  it("should throw if deleteProduct don't find a product", async () => {
+    sinon.stub(ProductModel, 'getProduct').resolves();
+    sinon.stub(ProductModel, 'deleteProduct').resolves();
+    try {
+      await ProductService.deleteProduct(2);
+    } catch (error) {
+      expect(error.isBoom).to.be.true;
+      expect(error.output.statusCode).to.equal(404);
+      expect(error.output.payload.message).to.equal('Product not found');
+    }
+  });
 });
