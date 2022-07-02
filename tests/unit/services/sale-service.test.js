@@ -69,4 +69,22 @@ describe('SaleService', () => {
       expect(error.output.payload.message).to.equal('Sale not found');
     }
   });
+
+  it('should delete a sale if calls deleteSale', async () => {
+    const deleteSaleStub = sinon.stub(SaleModel, 'deleteSale').resolves();
+    await SaleService.deleteSale(1);
+    expect(deleteSaleStub.calledOnce).to.be.true;
+  });
+
+  it("should throw an error if deleteSale don't find a sale", async () => {
+    sinon.stub(SaleModel, 'getSale').resolves([]);
+    sinon.stub(SaleModel, 'deleteSale').resolves();
+    try {
+      await SaleService.deleteSale(1);
+    } catch (error) {
+      expect(error.isBoom).to.be.true;
+      expect(error.output.statusCode).to.equal(404);
+      expect(error.output.payload.message).to.equal('Sale not found');
+    }
+  });
 });
