@@ -2,6 +2,7 @@ const SaleService = require('../../../services/sale-service');
 const SaleModel = require('../../../models/sale-model');
 const sinon = require('sinon');
 const { expect } = require('chai');
+const SaleValidator = require('../../../middlewares/sale-validator');
 
 describe('SaleService', () => {
   afterEach(() => {
@@ -20,6 +21,7 @@ describe('SaleService', () => {
     ];
 
     sinon.stub(SaleModel, 'createProductSales').resolves();
+    sinon.stub(SaleValidator, 'productExists').resolves();
     const createSaleStub = sinon.stub(SaleModel, 'createSale').resolves(1);
     const resultMultiple = await SaleService.createSale(multipleSales);
     expect(resultMultiple).to.equal(1);

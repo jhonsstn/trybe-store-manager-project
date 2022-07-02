@@ -58,6 +58,7 @@ describe('ProductService', () => {
     const product = { name: 'New Produto 1' };
     sinon.stub(ProductValidator, 'validateProduct').resolves();
     sinon.stub(ProductModel, 'updateProduct').resolves();
+    sinon.stub(ProductModel, 'getProduct').resolves(true);
     await ProductService.updateProduct(2, product);
 
     expect(ProductValidator.validateProduct.calledWith(product)).to.be.true;
@@ -80,13 +81,13 @@ describe('ProductService', () => {
 
   it('should delete a product if deleteProduct is called', async () => {
     sinon.stub(ProductModel, 'deleteProduct').resolves();
+    sinon.stub(ProductModel, 'getProduct').resolves(true);
     await ProductService.deleteProduct(2);
 
     expect(ProductModel.deleteProduct.calledWith(2)).to.be.true;
   });
 
   it("should throw if deleteProduct don't find a product", async () => {
-    sinon.stub(ProductModel, 'getProduct').resolves();
     sinon.stub(ProductModel, 'deleteProduct').resolves();
     try {
       await ProductService.deleteProduct(2);
