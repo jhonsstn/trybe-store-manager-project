@@ -14,6 +14,7 @@ const mockResponse = () => {
   const res = {};
   res.status = sinon.stub().returns(res);
   res.json = sinon.stub().returns(res);
+  res.sendStatus = sinon.stub().returns(res);
   return res;
 };
 
@@ -121,5 +122,16 @@ describe('SaleController', () => {
     expect(getSaleStub.calledWith(1)).to.be.true;
     expect(res.status.calledWith(200)).to.be.true;
     expect(res.json.calledWith(sale)).to.be.true;
+  });
+
+  it('should delete a sale if calls deleteSale', async () => {
+    const deleteSaleStub = sinon.stub(SaleService, 'deleteSale').resolves();
+    const req = mockRequest(null, 1);
+    const res = mockResponse();
+    await SaleController.deleteSale(req, res);
+
+    expect(deleteSaleStub.calledWith(1)).to.be.true;
+    expect(res.sendStatus.calledWith(204)).to.be.true;
+    expect(res.json.calledOnce).to.be.false;
   });
 });
