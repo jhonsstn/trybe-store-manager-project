@@ -19,6 +19,11 @@ const ProductController = {
     await ProductService.updateProduct(req.params.id, req.body);
     res.status(200).json({ id: req.params.id, ...req.body });
   },
+
+  deleteProduct: async (req, res) => {
+    await ProductService.deleteProduct(req.params.id);
+    res.sendStatus(204);
+  },
 };
 
 module.exports = ProductController;
