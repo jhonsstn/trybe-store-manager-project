@@ -19,6 +19,13 @@ const ProductService = {
     const newProductId = await ProductModel.createProduct(product);
     return newProductId;
   },
+
+  updateProduct: async (id, product) => {
+    ProductValidator.validateProduct(product);
+    const productToUpdate = await ProductModel.getProduct(id);
+    if (!productToUpdate) throw Boom.notFound('Product not found');
+    await ProductModel.updateProduct(id, product);
+  },
 };
 
 module.exports = ProductService;
