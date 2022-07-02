@@ -37,4 +37,11 @@ describe('ProductModel', () => {
 
     expect(result).to.equal(1);
   });
+
+  it('should update a product if updateProduct is called', async () => {
+    const product = { name: 'New Produto 1' };
+    const queryStub = sinon.stub(db, 'query').resolves();
+    ProductModel.updateProduct(2, product);
+    expect(queryStub.calledOnce).to.be.true;
+  });
 });
