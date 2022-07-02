@@ -17,6 +17,7 @@ const mockResponse = () => {
   const res = {};
   res.status = sinon.stub().returns(res);
   res.json = sinon.stub().returns(res);
+  res.sendStatus = sinon.stub().returns(res);
   return res;
 };
 
@@ -82,5 +83,17 @@ describe('ProductController', () => {
     expect(updateProductStub.calledWith(1, product)).to.be.true;
     expect(res.status.calledWith(200)).to.be.true;
     expect(res.json.calledWith(resProduct)).to.be.true;
+  });
+
+  it('should delete a product if deleteProduct is called', async () => {
+    const req = mockRequest(1);
+    const res = mockResponse();
+    const deleteProductStub = sinon
+      .stub(ProductService, 'deleteProduct')
+      .resolves();
+    await ProductController.deleteProduct(req, res);
+
+    expect(deleteProductStub.calledWith(1)).to.be.true;
+    expect(res.sendStatus.calledWith(204)).to.be.true;
   });
 });
