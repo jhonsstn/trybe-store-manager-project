@@ -26,6 +26,12 @@ const ProductService = {
     if (!productToUpdate) throw Boom.notFound('Product not found');
     await ProductModel.updateProduct(id, product);
   },
+
+  deleteProduct: async (id) => {
+    const productToDelete = await ProductModel.getProduct(id);
+    if (!productToDelete) throw Boom.notFound('Product not found');
+    await ProductModel.deleteProduct(id);
+  },
 };
 
 module.exports = ProductService;
