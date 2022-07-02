@@ -29,6 +29,14 @@ const SaleService = {
     }
     return sale;
   },
+
+  deleteSale: async (id) => {
+    const sale = await SaleModel.getSale(id);
+    if (sale.length === 0) {
+      throw Boom.notFound('Sale not found');
+    }
+    await SaleModel.deleteSale(id);
+  },
 };
 
 module.exports = SaleService;
