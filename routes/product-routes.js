@@ -10,4 +10,6 @@ route.get('/:id', rescue(productController.getProduct));
 
 route.post('/', rescue(productController.createProduct));
 
+route.put('/:id', rescue(productController.updateProduct));
+
 module.exports = route;
