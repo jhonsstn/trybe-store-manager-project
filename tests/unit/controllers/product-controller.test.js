@@ -68,4 +68,19 @@ describe('ProductController', () => {
     expect(res.status.calledWith(201)).to.be.true;
     expect(res.json.calledWith({ id: 1, name: 'Produto 1' })).to.be.true;
   });
+
+  it('should update a product if updateProduct is called', async () => {
+    const product = { name: 'Produto 1' };
+    const resProduct = { id: 1, name: 'Produto 1' };
+    const req = mockRequest(1, 'Produto 1');
+    const res = mockResponse();
+    const updateProductStub = sinon
+      .stub(ProductService, 'updateProduct')
+      .resolves(product);
+    await ProductController.updateProduct(req, res);
+
+    expect(updateProductStub.calledWith(1, product)).to.be.true;
+    expect(res.status.calledWith(200)).to.be.true;
+    expect(res.json.calledWith(resProduct)).to.be.true;
+  });
 });
