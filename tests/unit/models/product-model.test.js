@@ -44,4 +44,10 @@ describe('ProductModel', () => {
     ProductModel.updateProduct(2, product);
     expect(queryStub.calledOnce).to.be.true;
   });
+
+  it('should delete a product if deleteProduct is called', async () => {
+    const queryStub = sinon.stub(db, 'query').resolves();
+    ProductModel.deleteProduct(2);
+    expect(queryStub.calledOnce).to.be.true;
+  });
 });
