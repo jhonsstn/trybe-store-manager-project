@@ -31,8 +31,8 @@ const SaleService = {
   },
 
   deleteSale: async (id) => {
-    const sale = await SaleModel.getSale(id);
-    if (sale.length === 0) {
+    const sale = await SaleModel.saleExists(id);
+    if (!sale) {
       throw Boom.notFound('Sale not found');
     }
     await SaleModel.deleteSale(id);

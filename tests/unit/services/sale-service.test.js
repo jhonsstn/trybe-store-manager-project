@@ -71,13 +71,14 @@ describe('SaleService', () => {
   });
 
   it('should delete a sale if calls deleteSale', async () => {
+    sinon.stub(SaleModel, 'saleExists').resolves(true);
     const deleteSaleStub = sinon.stub(SaleModel, 'deleteSale').resolves();
     await SaleService.deleteSale(1);
     expect(deleteSaleStub.calledOnce).to.be.true;
   });
 
   it("should throw an error if deleteSale don't find a sale", async () => {
-    sinon.stub(SaleModel, 'getSale').resolves([]);
+    sinon.stub(SaleModel, 'saleExists').resolves(false);
     sinon.stub(SaleModel, 'deleteSale').resolves();
     try {
       await SaleService.deleteSale(1);
