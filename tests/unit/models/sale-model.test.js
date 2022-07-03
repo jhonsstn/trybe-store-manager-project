@@ -58,6 +58,13 @@ describe('SaleModel', () => {
     expect(result).to.deep.equal(sale);
   });
 
+  it('should return false if sale does not exist', async () => {
+    sinon.stub(db, 'query').resolves([[]]);
+    const result = await SaleModel.saleExists(1);
+
+    expect(result).to.be.false;
+  });
+
   it('should delete a sale if calls deleteSale', async () => {
     const queryStub = sinon.stub(db, 'query').resolves();
     await SaleModel.deleteSale(1);
