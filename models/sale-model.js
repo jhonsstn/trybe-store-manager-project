@@ -41,6 +41,15 @@ const SaleModel = {
     return sale;
   },
 
+  saleExists: async (id) => {
+    const sqlQuery = `
+    select 1
+    from StoreManager.sales
+    where id = ?;`;
+    const [[sale]] = await db.query(sqlQuery, [id]);
+    return !!sale;
+  },
+
   deleteSale: async (id) => {
     const sqlQuery = 'delete from StoreManager.sales where id = ?;';
     await db.query(sqlQuery, [id]);
