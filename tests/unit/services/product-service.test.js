@@ -81,14 +81,14 @@ describe('ProductService', () => {
 
   it('should delete a product if deleteProduct is called', async () => {
     sinon.stub(ProductModel, 'deleteProduct').resolves();
-    sinon.stub(ProductModel, 'getProduct').resolves(true);
+    sinon.stub(ProductModel, 'productExists').resolves(true);
     await ProductService.deleteProduct(2);
 
     expect(ProductModel.deleteProduct.calledWith(2)).to.be.true;
   });
 
   it("should throw if deleteProduct don't find a product", async () => {
-    sinon.stub(ProductModel, 'deleteProduct').resolves();
+    sinon.stub(ProductModel, 'productExists').resolves(false);
     try {
       await ProductService.deleteProduct(2);
     } catch (error) {

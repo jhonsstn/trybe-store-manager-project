@@ -28,8 +28,8 @@ const ProductService = {
   },
 
   deleteProduct: async (id) => {
-    const productToDelete = await ProductModel.getProduct(id);
-    if (!productToDelete) throw Boom.notFound('Product not found');
+    const exists = await ProductModel.productExists(id);
+    if (!exists) throw Boom.notFound('Product not found');
     await ProductModel.deleteProduct(id);
   },
 };

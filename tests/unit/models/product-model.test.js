@@ -50,4 +50,10 @@ describe('ProductModel', () => {
     ProductModel.deleteProduct(2);
     expect(queryStub.calledOnce).to.be.true;
   });
+
+  it('should return true if product exists', async () => {
+    sinon.stub(db, 'query').resolves([[{ id: 1 }]]);
+    const result = await ProductModel.productExists(1);
+    expect(result).to.be.true;
+  });
 });
