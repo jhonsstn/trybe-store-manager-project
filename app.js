@@ -16,7 +16,6 @@ app.use('/products', productRoutes);
 app.use('/sales', saleRoutes);
 
 app.use((err, _req, res, _next) => {
-  console.log('Log de Erro 500:', err);
   const {
     output: { payload },
   } = err;
