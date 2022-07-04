@@ -12,4 +12,6 @@ route.get('/', rescue(saleController.getSales));
 
 route.delete('/:id', rescue(saleController.deleteSale));
 
+route.put('/:id', rescue(saleController.updateSale));
+
 module.exports = route;
