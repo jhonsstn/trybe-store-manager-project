@@ -134,4 +134,27 @@ describe('SaleController', () => {
     expect(res.sendStatus.calledWith(204)).to.be.true;
     expect(res.json.calledOnce).to.be.false;
   });
+
+  it('should update a sale if calls updateSale', async () => {
+    const products = [
+      {
+        productId: 1,
+        quantity: 1,
+      },
+      {
+        productId: 2,
+        quantity: 5,
+      },
+    ];
+
+    const updateSaleStub = sinon.stub(SaleService, 'updateSale').resolves();
+    const req = mockRequest(products, 1);
+    const res = mockResponse();
+    await SaleController.updateSale(req, res);
+
+    expect(updateSaleStub.calledWith(1, products)).to.be.true;
+    expect(res.status.calledWith(200)).to.be.true;
+    expect(res.json.calledWith({ saleId: 1, itemsUpdated: products })).to.be
+      .true;
+  });
 });
