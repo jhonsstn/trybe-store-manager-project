@@ -37,6 +37,20 @@ const SaleService = {
     }
     await SaleModel.deleteSale(id);
   },
+
+  updateSale: async (saleId, products) => {
+    const exists = await SaleModel.saleExists(saleId);
+    if (!exists) {
+      throw Boom.notFound('Sale not found');
+    }
+    const toResolve = [];
+    products.forEach((product) => {
+      SaleValidator.validateSale(product);
+      toResolve.push(SaleValidator.productExists(product.productId));
+      SaleModel.updateSale(saleId, product);
+    });
+    await Promise.all(toResolve);
+  },
 };
 
 module.exports = SaleService;
