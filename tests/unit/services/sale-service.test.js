@@ -88,4 +88,41 @@ describe('SaleService', () => {
       expect(error.output.payload.message).to.equal('Sale not found');
     }
   });
+
+  it('should update a sale if calls updateSale', async () => {
+    const products = [
+      {
+        productId: 1,
+        quantity: 1,
+      },
+      {
+        productId: 2,
+        quantity: 5,
+      },
+    ];
+
+    const saleExistsStub = sinon.stub(SaleModel, 'saleExists').resolves(true);
+    const updateSaleStub = sinon.stub(SaleModel, 'updateSale').resolves();
+    const productExistsStub = sinon
+      .stub(SaleValidator, 'productExists')
+      .resolves();
+    await SaleService.updateSale(1, products);
+
+    expect(saleExistsStub.calledOnce).to.be.true;
+    expect(updateSaleStub.calledTwice).to.be.true;
+    expect(productExistsStub.calledTwice).to.be.true;
+  });
+
+  it("should throw an error if updateSale don't find a sale", async () => {
+    sinon.stub(SaleModel, 'saleExists').resolves(false);
+    sinon.stub(SaleModel, 'updateSale').resolves();
+    sinon.stub(SaleValidator, 'productExists').resolves();
+    try {
+      await SaleService.updateSale(1, []);
+    } catch (error) {
+      expect(error.isBoom).to.be.true;
+      expect(error.output.statusCode).to.equal(404);
+      expect(error.output.payload.message).to.equal('Sale not found');
+    }
+  });
 });
