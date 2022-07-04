@@ -4,13 +4,13 @@ const sinon = require('sinon');
 const ProductController = require('../../../controllers/product-controller');
 const ProductService = require('../../../services/product-service');
 
-const mockRequest = (id, name) => ({
+const mockRequest = (id, body, query) => ({
   params: {
     id,
   },
-  body: {
-    name,
-  },
+  body,
+
+  query,
 });
 
 const mockResponse = () => {
@@ -57,7 +57,7 @@ describe('ProductController', () => {
   });
 
   it('should create a product if createProduct is called', async () => {
-    const req = mockRequest(null, 'Produto 1');
+    const req = mockRequest(null, { name: 'Produto 1' });
     const res = mockResponse();
     const product = { name: 'Produto 1' };
     const createProductStub = sinon
@@ -73,7 +73,7 @@ describe('ProductController', () => {
   it('should update a product if updateProduct is called', async () => {
     const product = { name: 'Produto 1' };
     const resProduct = { id: 1, name: 'Produto 1' };
-    const req = mockRequest(1, 'Produto 1');
+    const req = mockRequest(1, { name: 'Produto 1' });
     const res = mockResponse();
     const updateProductStub = sinon
       .stub(ProductService, 'updateProduct')
@@ -95,5 +95,37 @@ describe('ProductController', () => {
 
     expect(deleteProductStub.calledWith(1)).to.be.true;
     expect(res.sendStatus.calledWith(204)).to.be.true;
+  });
+
+  it('should return a product list if getProductsByName is called', async () => {
+    const reqWithName = mockRequest(null, null, { q: 'Produto 1' });
+    const reqWithoutName = mockRequest(null, null, { q: undefined });
+    const res = mockResponse();
+    const productList = [
+      { id: 1, name: 'Produto 1' },
+      { id: 2, name: 'Produto 2' },
+    ];
+
+    const allProductsList = [
+      { id: 1, name: 'Produto 1' },
+      { id: 2, name: 'Produto 2' },
+      { id: 3, name: 'Produto 3' },
+    ];
+    const getProductsByNameStub = sinon
+      .stub(ProductService, 'getProductsByName')
+      .resolves(productList);
+    await ProductController.getProductsByName(reqWithName, res);
+
+    expect(getProductsByNameStub.calledWith('Produto 1')).to.be.true;
+    expect(res.status.calledWith(200)).to.be.true;
+    expect(res.json.calledWith(productList)).to.be.true;
+
+    getProductsByNameStub.resolves(allProductsList);
+
+    await ProductController.getProductsByName(reqWithoutName, res);
+
+    expect(getProductsByNameStub.calledWith(undefined)).to.be.true;
+    expect(res.status.calledWith(200)).to.be.true;
+    expect(res.json.calledWith(allProductsList)).to.be.true;
   });
 });
