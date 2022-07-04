@@ -17,42 +17,51 @@ const SaleModel = {
 
   getSales: async () => {
     const sqlQuery = `
-    select sp.sale_id as saleId,
+    SELECT sp.sale_id AS saleId,
     s.date,
-    sp.product_id as productId,
+    sp.product_id AS productId,
     sp.quantity
-    from StoreManager.sales_products as sp
-    join StoreManager.sales as s
-    on s.id=sp.sale_id;`;
+    FROM StoreManager.sales_products AS sp
+    JOIN StoreManager.sales AS s
+    ON s.id=sp.sale_id;`;
     const [sales] = await db.query(sqlQuery);
     return sales;
   },
 
   getSale: async (id) => {
     const sqlQuery = `
-    select s.date,
-    sp.product_id as productId,
+    SELECT s.date,
+    sp.product_id AS productId,
     sp.quantity
-    from StoreManager.sales_products as sp
-    join StoreManager.sales as s
-    on s.id=sp.sale_id
-    where s.id = ?;`;
+    FROM StoreManager.sales_products AS sp
+    JOIN StoreManager.sales AS s
+    ON s.id=sp.sale_id
+    WHERE s.id = ?;`;
     const [sale] = await db.query(sqlQuery, [id]);
     return sale;
   },
 
   saleExists: async (id) => {
     const sqlQuery = `
-    select 1
-    from StoreManager.sales
-    where id = ?;`;
+    SELECT 1
+    FROM StoreManager.sales
+    WHERE id = ?;`;
     const [[sale]] = await db.query(sqlQuery, [id]);
     return !!sale;
   },
 
   deleteSale: async (id) => {
-    const sqlQuery = 'delete from StoreManager.sales where id = ?;';
+    const sqlQuery = 'delete FROM StoreManager.sales WHERE id = ?;';
     await db.query(sqlQuery, [id]);
+  },
+
+  updateSale: async (saleId, product) => {
+    const sqlQuery = `UPDATE StoreManager.sales_products
+    SET quantity = ?
+    WHERE sale_id = ?
+    AND product_id = ?;`;
+    console.log(product.quantity);
+    await db.query(sqlQuery, [product.quantity, saleId, product.productId]);
   },
 };
 
