@@ -24,6 +24,11 @@ const ProductController = {
     await ProductService.deleteProduct(req.params.id);
     res.sendStatus(204);
   },
+
+  getProductsByName: async (req, res) => {
+    const products = await ProductService.getProductsByName(req.query.q);
+    res.status(200).json(products);
+  },
 };
 
 module.exports = ProductController;
