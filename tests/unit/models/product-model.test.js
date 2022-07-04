@@ -56,4 +56,20 @@ describe('ProductModel', () => {
     const result = await ProductModel.productExists(1);
     expect(result).to.be.true;
   });
+
+  it('should return products if getProductsByName is called', async () => {
+    const products = [
+      [
+        { id: 1, name: 'Produto 1' },
+        { id: 2, name: 'Produto 2' },
+      ],
+    ];
+    const productList = [
+      { id: 1, name: 'Produto 1' },
+      { id: 2, name: 'Produto 2' },
+    ];
+    sinon.stub(db, 'query').resolves(products);
+    const result = await ProductModel.getProductsByName('Produto');
+    expect(result).to.deep.equal(productList);
+  });
 });
