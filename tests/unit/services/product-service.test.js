@@ -97,4 +97,36 @@ describe('ProductService', () => {
       expect(error.output.payload.message).to.equal('Product not found');
     }
   });
+
+  it('should return a product list if getProductsByName is called', async () => {
+    const productList = [
+      { id: 1, name: 'Produto 1' },
+      { id: 2, name: 'Produto 2' },
+    ];
+
+    const allProductsList = [
+      { id: 1, name: 'Produto 1' },
+      { id: 2, name: 'Produto 2' },
+      { id: 3, name: 'Produto 3' },
+    ];
+
+    const getProductsStub = sinon
+      .stub(ProductModel, 'getProducts')
+      .resolves(allProductsList);
+    const getProductsByNameStub = sinon
+      .stub(ProductModel, 'getProductsByName')
+      .resolves(productList);
+    const resultWithoutName = await ProductService.getProductsByName(undefined);
+
+    expect(getProductsStub.calledOnce).to.be.true;
+    expect(getProductsByNameStub.notCalled).to.be.true;
+    expect(resultWithoutName).to.deep.equal(allProductsList);
+
+    const resultWithName = await ProductService.getProductsByName('Produto');
+
+    expect(getProductsStub.calledOnce).to.be.true;
+    expect(getProductsByNameStub.calledOnce).to.be.true;
+    expect(getProductsByNameStub.calledWith('Produto')).to.be.true;
+    expect(resultWithName).to.deep.equal(productList);
+  });
 });
