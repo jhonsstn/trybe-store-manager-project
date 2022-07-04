@@ -22,6 +22,11 @@ const SaleController = {
     await SaleService.deleteSale(req.params.id);
     res.sendStatus(204);
   },
+
+  updateSale: async (req, res) => {
+    await SaleService.updateSale(req.params.id, req.body);
+    res.status(200).json({ saleId: req.params.id, itemsUpdated: req.body });
+  },
 };
 
 module.exports = SaleController;
