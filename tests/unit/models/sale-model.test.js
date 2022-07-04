@@ -71,4 +71,20 @@ describe('SaleModel', () => {
 
     expect(queryStub.calledOnce).to.be.true;
   });
+
+  it('should update a sale if calls updateSale', async () => {
+    const queryStub = sinon.stub(db, 'query').resolves();
+    await SaleModel.updateSale(1, [
+      {
+        productId: 1,
+        quantity: 10,
+      },
+      {
+        productId: 2,
+        quantity: 50,
+      },
+    ]);
+
+    expect(queryStub.calledOnce).to.be.true;
+  });
 });
