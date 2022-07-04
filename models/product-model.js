@@ -34,6 +34,12 @@ const ProductModel = {
     const sqlQuery = 'DELETE FROM StoreManager.products WHERE id = ?;';
     await db.query(sqlQuery, [id]);
   },
+
+  getProductsByName: async (name) => {
+    const sqlQuery = 'SELECT * FROM StoreManager.products WHERE name LIKE ?;';
+    const [products] = await db.query(sqlQuery, [`%${name}%`]);
+    return products;
+  },
 };
 
 module.exports = ProductModel;
