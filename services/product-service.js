@@ -32,6 +32,15 @@ const ProductService = {
     if (!exists) throw Boom.notFound('Product not found');
     await ProductModel.deleteProduct(id);
   },
+
+  getProductsByName: async (name) => {
+    if (!name) {
+      const allProducts = await ProductModel.getProducts();
+      return allProducts;
+    }
+    const productsByName = await ProductModel.getProductsByName(name);
+    return productsByName;
+  },
 };
 
 module.exports = ProductService;
